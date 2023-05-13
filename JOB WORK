@@ -1,0 +1,91 @@
+	#include <stdio.h>#include <stdbool.h>
+
+#include <limits.h>
+
+#define N 4
+
+int cost[N][N] = {
+
+    {12, 8, 9, 10},
+
+    {11, 10, 10, 9},
+
+    {9, 11, 8, 12},
+
+    {11, 9, 23, 7}
+
+};
+
+bool assigned[N] = {false};
+
+int findMinCost(int worker, int totalCost, int upperBound, int depth) {
+
+    if(depth == N) { // base case: all jobs have been assigned
+
+        return totalCost;
+
+    }
+
+    int minCost = INT_MAX;
+
+    for(int j = 0; j < N; j++) {
+
+        if(!assigned[j]) { // job j has not been assigned yet
+
+            assigned[j] = true;
+
+            int newCost = totalCost + cost[worker][j];
+
+            int newUpperBound = upperBound - cost[worker][j];
+
+            if(newCost + newUpperBound < minCost) { // prune the branch if the cost exceeds the upper bound
+
+                int nextCost = findMinCost(worker + 1, newCost, newUpperBound, depth + 1);
+
+                minCost = nextCost < minCost ? nextCost : minCost;
+
+            }
+
+            assigned[j] = false;
+
+        }
+
+    }
+
+    return minCost;
+
+}
+
+int main() {
+
+    int totalCost = 0;
+
+    int upperBound = 0;
+
+    for(int i = 0; i < N; i++) {
+
+        int minCost = INT_MAX;
+
+        for(int j = 0; j < N; j++) {
+
+            if(cost[i][j] < minCost) {
+
+                minCost = cost[i][j];
+
+            }
+
+        }
+
+        totalCost += minCost;
+
+        upperBound += cost[i][i];
+
+    }
+
+    int minCost = findMinCost(0, 0, upperBound, 0);
+
+    printf("Minimum cost: %d\n", minCost);
+
+    return 0;
+
+}
