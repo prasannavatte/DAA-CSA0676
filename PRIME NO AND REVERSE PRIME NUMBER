@@ -1,0 +1,65 @@
+	#include <stdio.h>#include <stdbool.h>
+
+bool isPrime(int n) {
+
+    if(n < 2) {
+
+        return false;
+
+    }
+
+    for(int i = 2; i <= n/2; i++) {
+
+        if(n % i == 0) {
+
+            return false;
+
+        }
+
+    }
+
+    return true;
+
+}
+
+int reverse(int n) {
+
+    int rev = 0;
+
+    while(n != 0) {
+
+        rev = rev * 10 + (n % 10);
+
+        n /= 10;
+
+    }
+
+    return rev;
+
+}
+
+int main() {
+
+    int N;
+
+    printf("Enter the value of N: ");
+
+    scanf("%d", &N);
+
+    printf("Prime numbers whose reverse is also prime:\n");
+
+    for(int i = 2; i <= N; i++) {
+
+        if(isPrime(i) && isPrime(reverse(i))) {
+
+            printf("%d\n", i);
+
+        }
+
+    }
+
+    return 0;
+
+}
+
+Footer
